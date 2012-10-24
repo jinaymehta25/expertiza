@@ -26,6 +26,11 @@ due_date<%= i*5+j %>:
   assignment_id: <%= Fixtures.identify("assignment"+i.to_s) %>
   late_policy_id: <%= Fixtures.identify("late_policy"+i.to_s) %>
   round: 1
+  submission_allowed_id: 2
+  resubmission_allowed_id: 2
+  review_allowed_id: 1
+  rereview_allowed_id: 1
+  review_of_review_allowed_id: 1
 <% team_num = i*5+j+ 25 %>
 due_date<%= team_num %>:
   due_at: <%= (Time.now + 100000).strftime("%Y-%m-%d %H:%M:%S") %>

@@ -57,6 +57,7 @@ par5:
   penalty_accumulated: 0
   type : CourseParticipant
   handle: "par5"
+  topic_id : 545653410
   
 par6:
   submit_allowed: 1
