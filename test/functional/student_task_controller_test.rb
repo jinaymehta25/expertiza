@@ -229,17 +229,8 @@ class StudentTaskControllerTest < ActionController::TestCase
     assert_redirected_to "/denied"
   end
 
-  #FN: JM - 04
-  # Tests valid student with all valid properties is rendering correct page
-  #def test_valid_student_task_view
-  #  @request.session[:user] = User.find(users(:student1).id)
-  #  @participant = AssignmentParticipant.find(participants(:par1).id)
-  #  get :view, {:id => @participant.id}
-  #  assert_template :view
-  #  assert_select "title","student_task | view"
-  #end
 
-  #FN: JM - 05
+  #FN: JM - 04
   # invalid student trying to access student task view
   def test_invalid_user_student_task_view
     @request.session[:user] = ""
@@ -248,7 +239,7 @@ class StudentTaskControllerTest < ActionController::TestCase
     assert_redirected_to "/denied"
   end
 
-  #FN: JM - 06
+  #FN: JM - 05
   #Student who has to review or reviewed others work
   def test_valid_others_work
     @request.session[:user] = User.find(users(:student1).id)
@@ -258,7 +249,7 @@ class StudentTaskControllerTest < ActionController::TestCase
     assert_select "title","student_task | others_work"
   end
 
-  #FN: JM - 07
+  #FN: JM - 06
   # invalid student trying to access others work
   def test_invalid_others_work
     @request.session[:user] = ""
@@ -268,7 +259,7 @@ class StudentTaskControllerTest < ActionController::TestCase
   end
 
 
-  #FN: JM - 08
+  #FN: JM - 07
   # This test checks review due dates with one that are known and the one that are got from the function
   def test_valid_review_dates_others_work
     #@request.session[:user] =  User.find(users(:student1).id)
@@ -289,27 +280,6 @@ class StudentTaskControllerTest < ActionController::TestCase
     assert_equal(DeadlineType.find(@review_phase).name , deadline_types(:deadline_type_review).name)
   end
 
-
-
-
-  #FN: JM - 05
-  # invalid student trying to access student task view
-  def test_invalid_user_student_task_view
-    @request.session[:user] = ""
-    @participant = AssignmentParticipant.find(participants(:par1).id)
-    get :view, {:id => @participant.id}
-    assert_redirected_to "/denied"
-  end
-
-
-  #FN: JM - 07
-  # invalid student trying to access others work
-  def test_invalid_others_work
-    @request.session[:user] = ""
-    @participant = AssignmentParticipant.find(participants(:par1).id)
-    get :others_work, {:id => @participant.id}
-    assert_redirected_to "/denied"
-  end
 
 
   #FN ## - GP

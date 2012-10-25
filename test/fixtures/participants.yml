@@ -9,6 +9,18 @@ par0:
   type : AssignmentParticipant
   handle: "par0"
   
+student:
+  submit_allowed: 1
+  review_allowed: 1
+  user_id: 3
+  #<%= Fixtures.identify(:student) %>
+  parent_id: 1
+  topic: Research EPA
+  penalty_accumulated: 0
+  type : AssignmentParticipant
+  handle: "student"
+  submitted_hyperlinks: "---- http://stackoverflow.com/questions/4351987/rails-functional-test"
+
 par1:
   submit_allowed: 1
   review_allowed: 1

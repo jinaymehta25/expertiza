@@ -48,7 +48,7 @@ class StudentReviewControllerTest < ActionController::TestCase
     assignment=Assignment.find(:first,:conditions => ["id=?",participant.parent_id] )
     session[:user] = @user
     current_stage = assignment.get_current_stage(participant.topic_id)
-    result = "Complete"
+    result = "rereview"
     assert_equal(current_stage, result)
 
   end
@@ -70,7 +70,7 @@ class StudentReviewControllerTest < ActionController::TestCase
     participant = Participant.find(participants(:par0))
     assignment = Assignment.find(:first, :conditions => ["id=?", participant.parent_id])
     review_rounds = assignment.get_review_rounds
-    result = 0
+    result = 2
     assert_equal(result, review_rounds)
 
   end
