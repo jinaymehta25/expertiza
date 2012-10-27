@@ -42,6 +42,7 @@ class StudentReviewControllerTest < ActionController::TestCase
   end
 
   #Test case for retreiving the current stage of the assignment
+  #The stage can be "complete", "resubmission", "rereview" and "submission"
   def test_get_current_stage
 
     participant=Participant.find(participants(:par0))
@@ -54,6 +55,8 @@ class StudentReviewControllerTest < ActionController::TestCase
   end
 
   #Testing the functionality of finding the correct reviewer_id
+  #This test is to validate when a user is a reviewer.
+  #The find_all_by_reviewer_id will validate whether the logged in user is a reviewer using his reviewer_id
   def test_find_reviewer_id
 
     participant=Participant.find(participants(:par14))
@@ -64,8 +67,9 @@ class StudentReviewControllerTest < ActionController::TestCase
 
   end
 
-  #Testing the number of review rounds
-  def test_verify_rounds
+  #Testing the number of review rounds for a given assignment.
+  #review_rounds is a variable which is associated with the number of times an assignment has been reviewed.
+    def test_verify_rounds
 
     participant = Participant.find(participants(:par0))
     assignment = Assignment.find(:first, :conditions => ["id=?", participant.parent_id])
@@ -75,7 +79,8 @@ class StudentReviewControllerTest < ActionController::TestCase
 
   end
 
-  #Test to verify the reviewer_id
+  #Test to verify the reviewer_id. This test case is used to verify the correct 
+  #reviewer_id using the topic_id and the deadline_id of the assignment
   def test_review_allowed_id
 
     participant = Participant.find(participants(:par5))
@@ -87,7 +92,7 @@ class StudentReviewControllerTest < ActionController::TestCase
 
   end
 
-  #Test to verify the rereview_allowed_id
+  #Test to verify the rereview_allowed_id using the topic_id and deadline_id for a given assignment.
   def test_rereview_allowed_id
 
     participant = Participant.find(participants(:par5))
@@ -99,7 +104,7 @@ class StudentReviewControllerTest < ActionController::TestCase
 
   end
 
-  #Test to verify team_review_id
+  #Test to verify team_review_id for a given team.
   def test_verify_team_review_response
 
     participant = Participant.find(participants(:par2))
@@ -110,7 +115,7 @@ class StudentReviewControllerTest < ActionController::TestCase
 
   end
 
-  #Test to verify the metareviewer_id
+  #Test to verify the metareviewer_id for a given participant.
   def test_find_metareviewer_id
 
     participant=Participant.find(participants(:par15))
