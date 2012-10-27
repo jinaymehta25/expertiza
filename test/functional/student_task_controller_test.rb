@@ -202,7 +202,9 @@ class StudentTaskControllerTest < ActionController::TestCase
 
 
   #FN: JM - 01
-  #Tests redirection for Eula Display and checks if correct page is being rendered
+  #Here the test case goes down a gray path and checks if the user has logged in for first time then he
+  #should be redirected to eula/display page. So while asserting we look for redirection to the page in
+  #question.
   def test_valid_newstudent_student_list
     @request.session[:user] = User.find(users(:student2).id)
     @participant = AssignmentParticipant.find(participants(:par2).id)
@@ -211,7 +213,9 @@ class StudentTaskControllerTest < ActionController::TestCase
   end
 
   #FN: JM - 02
-  # Tests the rendering of student_task list for returning student
+  #Here the test case goes down the Happy path and checks that the logged in user is not a first time user
+  # and if so then should display the correct list of tasks. This is asserted by checking for the known html 
+  #elements that get rendered
   def test_valid_oldstudent_student_list
     @request.session[:user] = User.find(users(:student1).id)
     @participant = AssignmentParticipant.find(participants(:par1).id)
@@ -221,7 +225,9 @@ class StudentTaskControllerTest < ActionController::TestCase
   end
 
   #FN: JM - 03
-  # Tests valid student with all valid properties is rendering correct page
+  # This test goes down the Sad path and tries to access the task_list web page witout logging In.
+  # In such a scenario the user should be redirected to the denied page. This is been
+  # asserted by ensuring that user is redirected to the intended "denied" page.
   def test_invalid_student_task_list
     @request.session[:user] = ""
     @participant = AssignmentParticipant.find(participants(:par1).id)
@@ -231,7 +237,9 @@ class StudentTaskControllerTest < ActionController::TestCase
 
 
   #FN: JM - 04
-  # invalid student trying to access student task view
+  # This test goes down the Sad path and tries to access the task_view web page witout logging In.
+  # In such a scenario the user should be redirected to the denied page. This is been
+  # asserted by ensuring that user is redirected to the intended "denied" page.
   def test_invalid_user_student_task_view
     @request.session[:user] = ""
     @participant = AssignmentParticipant.find(participants(:par1).id)
@@ -240,7 +248,9 @@ class StudentTaskControllerTest < ActionController::TestCase
   end
 
   #FN: JM - 05
-  #Student who has to review or reviewed others work
+  # This test tries to fetch the page of others work. As it is a Happy Testng path with all the  
+  # correct parameters provided the Others_Work web page should be displayed. This is asserted by
+  # checking for the known html elements in the page that got rendered.
   def test_valid_others_work
     @request.session[:user] = User.find(users(:student1).id)
     @participant = AssignmentParticipant.find(participants(:par1).id)
@@ -250,7 +260,9 @@ class StudentTaskControllerTest < ActionController::TestCase
   end
 
   #FN: JM - 06
-  # invalid student trying to access others work
+  # This test goes down the Sad path and tries to access the Others_work web page witout logging In.
+  # In such a scenario the user should be redirected to the denied page. This is been
+  # asserted by ensuring that user is redirected to the intended "denied" page.
   def test_invalid_others_work
     @request.session[:user] = ""
     @participant = AssignmentParticipant.find(participants(:par1).id)
@@ -260,7 +272,10 @@ class StudentTaskControllerTest < ActionController::TestCase
 
 
   #FN: JM - 07
-  # This test checks review due dates with one that are known and the one that are got from the function
+  # This test aims at checking a functionality that fetches the review date and tries to match it
+  # with the one that we know is correct. The test selects a due date based on many conditions and
+  # asserts it with a known value passes in fixture. Thus we verify that the correct date is being 
+  # displayed on the others_work web page.
   def test_valid_review_dates_others_work
     #@request.session[:user] =  User.find(users(:student1).id)
     @assignment = assignments(:assignment1)
