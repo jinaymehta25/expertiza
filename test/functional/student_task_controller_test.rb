@@ -10,8 +10,9 @@ require 'student_task_controller'
 class StudentTaskController; def rescue_action(e) raise e end; end
 
 class StudentTaskControllerTest < ActionController::TestCase
+  # fixtures for the various objects involved in student task controller
   fixtures :users, :roles, :participants, :assignments, :due_dates, :deadline_types, :teams
-
+  # the setup subs 
   def setup
     @controller = StudentTaskController.new
     @request    = ActionController::TestRequest.new
@@ -22,6 +23,7 @@ class StudentTaskControllerTest < ActionController::TestCase
 
   # FN 01 - GP
   # redirect new user to eula controller
+  # if the user enters for the very first time the user should be re directed to EULA controller
   def test_new_user_redirect
     @request.session[:user] = User.find(users(:student1).id)
     user = User.find(users(:student1).id)
@@ -33,13 +35,15 @@ class StudentTaskControllerTest < ActionController::TestCase
 
   # FN 02 - GP
   #get the assignment user participates
-
+  # for a given user id test whether the function returns all the assignment the user participates in
   def test_return_assignment_user_participates
     assignment_assert = Participant.find(participants(:student)).to_a
     assignment_result = AssignmentParticipant.find_all_by_user_id(3, "parent_id DESC")
     assert_equal(assignment_assert,assignment_result)
   end
 
+  #get the assignment user participates
+  # for a given user id test whether the function doesnt returns all the assignment the user participates in
   def test_return_assignment_user_participates_negative
     assignment_assert = ""
     assignment_result = AssignmentParticipant.find_all_by_user_id(-1, "parent_id DESC")
@@ -49,6 +53,7 @@ class StudentTaskControllerTest < ActionController::TestCase
 
   #FN 03 - GP
   # get the current stage of the assignment
+  # for a given user id and for a particular assignments, return the current stage the assignment is in, test this functionality
   def test_current_stage
     participant=Participant.find(participants(:par1))
     assignment=Assignment.find(:first,:conditions => ["id=?",participant.parent_id] )
@@ -61,6 +66,7 @@ class StudentTaskControllerTest < ActionController::TestCase
 
   #FN 05 - GP
   # get the URL of the user assignment
+  # for a given user id and for a particular assignment, return the URLS the user has submitted for the particular the assignment 
   def test_get_url
     participant = Participant.find(participants(:student))
     url_result = participant.get_hyperlinks
@@ -72,6 +78,7 @@ class StudentTaskControllerTest < ActionController::TestCase
 
   #FN 06 - GP
   # get the reviews of the current object assignment by reviewee id
+  # return all the assignments the current user participates in review, or review the object
   def test_review_mapping_single
     participant=Participant.find(participants(:par14))
     rmaps_result = ParticipantReviewResponseMap.find_all_by_reviewee_id_and_reviewed_object_id(participant.id, participant.assignment.id)
@@ -89,6 +96,7 @@ class StudentTaskControllerTest < ActionController::TestCase
 
   #FN 07 - GP
   # check if the assignment is a team assignment
+  # for a given user id test if the assignment that the user participates is team assignment
   def test_team_assignment
     participant=Participant.find(participants(:par13))
     assignment=Assignment.find(:first,:conditions => ["id=?",participant.parent_id] )
@@ -102,6 +110,7 @@ class StudentTaskControllerTest < ActionController::TestCase
 
   #FN 08 - GP
   #get the reviewer map by participant id
+  #get the review mapping for current team assignment the user participates in 
   def test_review_team
     participant=Participant.find(participants(:par3))
     maps_result = TeamReviewResponseMap.find_all_by_reviewer_id(participant.id)
@@ -111,7 +120,7 @@ class StudentTaskControllerTest < ActionController::TestCase
     assert_equal(maps_assert.to_a,maps_result.to_a)
   end
 
-
+# test if the review objects that the user reviews are incorrectly listed -ve test case
   def test_review_team_negative
     participant=Participant.find(participants(:par3))
     maps_result = TeamReviewResponseMap.find_all_by_reviewer_id('-1')
@@ -122,6 +131,7 @@ class StudentTaskControllerTest < ActionController::TestCase
 
   #FN 09 - GP
   #get the review response map by id
+  #get the review mapping for current individual  assignment the user participates in 
   def test_review_single
     participant=Participant.find(participants(:par14))
     maps_result = ParticipantReviewResponseMap.find_all_by_reviewer_id(participant.id)
@@ -129,7 +139,7 @@ class StudentTaskControllerTest < ActionController::TestCase
     assert_equal(maps_assert.to_a,maps_result.to_a)
   end
 
-
+#get the review mapping for current individual  assignment the user participates in - ve test case 
   def test_review_single_negative
     participant=Participant.find(participants(:par14))
     maps_result = ParticipantReviewResponseMap.find_all_by_reviewer_id('-1')
@@ -141,6 +151,8 @@ class StudentTaskControllerTest < ActionController::TestCase
 
   #FN 10 - GP
   # get meta review for assignment by reviewee id
+  # get the meta review mapping for all the assignment the current user participates in 
+  # for a given assignment of the current user return all the meta review that is done or that is to be done
   def test_meta_review_mapping_all
     participant=Participant.find(participants(:par14))
     rmaps = ParticipantReviewResponseMap.find_all_by_reviewer_id_and_reviewed_object_id(participant.id, participant.assignment.id)
@@ -151,7 +163,8 @@ class StudentTaskControllerTest < ActionController::TestCase
 
 
   #FN 11 - GP
-  # get meta review for assignment by reviewer id                                              *
+  # get meta review for assignment by reviewer id
+  # for a given assignment of the current user return all the meta review that is done or that is to be done
   def test_meta_review_mapping
     participant=Participant.find(participants(:par15))
     mmaps_result = MetareviewResponseMap.find_all_by_reviewer_id(participant.id)
@@ -171,6 +184,8 @@ class StudentTaskControllerTest < ActionController::TestCase
   #FN 12 - GP
 
   #find a given participant
+  # test whether for a particular participant id, the function returns correct participant details 
+  
   def test_find_assignment_participant_view
     participant=Participant.find(participants(:par15))
     assertresult=AssignmentParticipant.find(participant.id)
@@ -182,6 +197,7 @@ class StudentTaskControllerTest < ActionController::TestCase
   #FN 13 - GP
 
   # find the first member
+  # check if the current assignment is team assignment, if yes return the first team member of the team handle
   def test_first_member_negative
     participant=''
     maps_result = AssignmentTeam.get_first_member(-1)
@@ -192,6 +208,7 @@ class StudentTaskControllerTest < ActionController::TestCase
   # FN 14 - GP
 
   # get the due date of the current topic
+  # for a given user id and for a particular assignments, return the current due date based on the current stage the assignment is in, test this functionality
   def test_review_due_date
     participant=Participant.find(participants(:par5))
     assertresult2 =TopicDeadline.find_by_topic_id_and_deadline_type_id(participant.topic_id, 2)
